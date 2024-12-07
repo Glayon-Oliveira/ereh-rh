@@ -1,5 +1,7 @@
 package com.lmlasmo.ereh.model;
 
+import com.lmlasmo.ereh.dto.AddressDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.PrePersist;
@@ -27,6 +29,15 @@ public class Address {
 	private String state;
 	
 	public Address() {}
+	
+	public Address(AddressDTO addressDTO) {
+		this.street = addressDTO.getStreet();
+		this.number = addressDTO.getNumber();
+		this.complement = addressDTO.getComplement();
+		this.district = addressDTO.getDistrict();
+		this.city = addressDTO.getCity();
+		this.state = addressDTO.getState();
+	}
 	
 	@PrePersist
 	@PreUpdate

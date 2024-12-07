@@ -14,13 +14,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 	
 	public Optional<Employee> findByEmail(String name);
 	
-	public List<Employee> findByNameContaining(String name);
-	
-	public List<Employee> findBySalaryGreaterThan(float salary);
-	
-	public List<Employee> findBySalaryLessThan(float salary);
-	
-	public List<Employee> findBySalaryBetween(float salary1, float salary2);
+	public List<Employee> findByNameContaining(String name);	
 	
 	public List<Employee> findByAdmissionDateAfter(LocalDate date);
 	

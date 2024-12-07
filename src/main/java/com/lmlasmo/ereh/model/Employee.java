@@ -2,6 +2,8 @@ package com.lmlasmo.ereh.model;
 
 import java.time.LocalDate;
 
+import com.lmlasmo.ereh.dto.EmployeeDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -50,6 +52,16 @@ public class Employee {
 	}
 	
 	public Employee() {}
+	
+	public Employee(EmployeeDTO employeeDTO) {
+		this.id = employeeDTO.getId();
+		this.name = employeeDTO.getName();
+		this.birthDate = employeeDTO.getBirthDate();
+		this.email = employeeDTO.getEmail();
+		this.telephone = employeeDTO.getTelephone();
+		this.admissionDate = employeeDTO.getAdmissionDate();
+		this.address = new Address(employeeDTO.getAddress());
+	}
 
 	public long getId() {
 		return id;

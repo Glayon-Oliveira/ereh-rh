@@ -3,6 +3,8 @@ package com.lmlasmo.ereh.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.lmlasmo.ereh.dto.PositionDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,6 +41,14 @@ public class Position {
 	private Set<Users> users = new HashSet<>();
 	
 	public Position() {}
+	
+	public Position(PositionDTO positionDTO) {		
+		this.id = positionDTO.getId();
+		this.name = positionDTO.getName();
+		this.activities = positionDTO.getActivities();
+		this.role = positionDTO.getRole();
+		this.department = new Department(positionDTO.getDepartment());		
+	}
 	
 	@PrePersist
 	@PreUpdate

@@ -7,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.lmlasmo.ereh.dto.UserDTO;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +16,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,10 +39,18 @@ public class Users implements UserDetails {
 	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
 	private Employee employee;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Position position;	
 	
 	public Users() {}	
+	
+	public Users(UserDTO userDTO) {
+		this.id = userDTO.getId();
+		this.username = userDTO.getUsername();
+		this.locked = userDTO.isLocked();
+		this.employee = new Employee(userDTO.getEmployee());
+		this.position = new Position(userDTO.getPosition());
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
