@@ -33,13 +33,13 @@ public class AddressDTO {
 	
 	public AddressDTO() {}
 	
-	public AddressDTO(Address address) {		
-		this.street = address.getStreet();
-		this.number = address.getNumber();
-		this.complement = address.getComplement();
-		this.district = address.getDistrict();
-		this.city = address.getCity();
-		this.state = address.getState();				
+	public AddressDTO(Address address) {
+		this.setStreet(address.getStreet());				
+		this.setNumber(address.getNumber());		
+		this.setComplement(address.getComplement());
+		this.setDistrict(address.getDistrict());						
+		this.setCity(address.getCity());
+		this.setState(address.getState());				
 	}
 
 	public String getStreet() {
@@ -47,7 +47,7 @@ public class AddressDTO {
 	}
 
 	public void setStreet(String street) {
-		this.street = street;
+		this.street = street.toUpperCase();
 	}
 
 	public int getNumber() {
@@ -63,7 +63,7 @@ public class AddressDTO {
 	}
 
 	public void setComplement(String complement) {
-		this.complement = complement;
+		this.complement = complement.toUpperCase();
 	}
 
 	public String getDistrict() {
@@ -71,7 +71,7 @@ public class AddressDTO {
 	}
 
 	public void setDistrict(String district) {
-		this.district = district;
+		this.district = district.toUpperCase();
 	}
 
 	public String getCity() {

@@ -22,14 +22,12 @@ public class UserDTO {
 	
 	public UserDTO() {}
 	
-	public UserDTO(Users user) {
-	
-		this.id = user.getId();
-		this.username = user.getUsername();
-		this.locked = user.isLocked();
+	public UserDTO(Users user) {	
+		this.setId(user.getId());
+		this.setUsername(user.getUsername());
+		this.setLocked(user.isLocked());
 		this.position = new PositionDTO(user.getPosition());
-		this.employee = new EmployeeDTO(user.getEmployee());
-		
+		this.employee = new EmployeeDTO(user.getEmployee());		
 	}
 
 	public String getId() {
@@ -45,7 +43,7 @@ public class UserDTO {
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = username.toLowerCase();
 	}
 
 	public boolean isLocked() {

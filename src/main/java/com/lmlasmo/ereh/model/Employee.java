@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.lmlasmo.ereh.dto.EmployeeDTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -42,13 +43,14 @@ public class Employee {
 	@Embedded
 	private Address address;
 	
-	@OneToOne(mappedBy = "employee", fetch = FetchType.EAGER)
+	@OneToOne(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Users user;
 	
 	@PrePersist
 	@PreUpdate
 	private void toUpperFields() {		
-		name = name.toUpperCase();				
+		name = name.toUpperCase();	
+		email = email.toLowerCase();
 	}
 	
 	public Employee() {}

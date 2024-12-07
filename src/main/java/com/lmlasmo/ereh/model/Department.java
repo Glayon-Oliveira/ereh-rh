@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.lmlasmo.ereh.dto.DepartmentDTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,7 +31,7 @@ public class Department {
 	@Column(columnDefinition = "TEXT")
 	private String details;
 	
-	@OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Set<Position> positions = new HashSet<>();
 	
 	public Department() {}

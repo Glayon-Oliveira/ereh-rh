@@ -18,5 +18,7 @@ public interface UsersRepository extends JpaRepository<Users, String>{
 	public Page<Users> findByLocked(boolean locked, Pageable pageable);	
 	
 	public void deleteByUsername(String username);
+
+	public boolean existsByName(String username);
 	
 }

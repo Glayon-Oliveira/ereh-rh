@@ -33,9 +33,9 @@ public class PositionDTO {
 	public PositionDTO() {}
 	
 	public PositionDTO(Position position) {	
-		this.id = position.getId();
-		this.name = position.getName();		
-		this.role = position.getRole();
+		this.setId(position.getId());
+		this.setName(position.getName());		
+		this.setRole(position.getRole());
 		this.department = new DepartmentDTO(position.getDepartment());		
 	}
 
@@ -52,7 +52,7 @@ public class PositionDTO {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.toUpperCase();
 	}
 
 	public String getActivities() {
@@ -60,7 +60,7 @@ public class PositionDTO {
 	}
 
 	public void setActivities(String activities) {
-		this.activities = activities;
+		this.activities = activities.toUpperCase();
 	}
 
 	public Roles getRole() {

@@ -3,12 +3,15 @@ package com.lmlasmo.ereh.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lmlasmo.ereh.model.Department;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class DepartmentDTO {
 	
 	@JsonProperty
 	private int id;
 	
 	@JsonProperty
+	@NotBlank
 	private String name;
 	
 	@JsonProperty
@@ -17,9 +20,9 @@ public class DepartmentDTO {
 	public DepartmentDTO() {}
 	
 	public DepartmentDTO(Department department) {		
-		this.id = department.getId();
-		this.name = department.getName();
-		this.details = department.getDetails();		
+		this.setId(department.getId());
+		this.setName(department.getName());
+		this.setDetails(department.getDetails());		
 	}
 
 	public int getId() {
@@ -35,7 +38,7 @@ public class DepartmentDTO {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.toUpperCase();
 	}
 
 	public String getDetails() {
@@ -43,7 +46,7 @@ public class DepartmentDTO {
 	}
 
 	public void setDetails(String details) {
-		this.details = details;
+		this.details = details.toUpperCase();
 	}	
 	
 }

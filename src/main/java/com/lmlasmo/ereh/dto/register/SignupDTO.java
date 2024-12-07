@@ -6,12 +6,14 @@ import com.lmlasmo.ereh.dto.PositionDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class SignupDTO {
 
 	@JsonProperty
 	@NotBlank
+	@Pattern(regexp =  "^[a-z0-9ñç]+$", message = "Special characters, accents or spaces are not allowed")
 	@Size(min = 2 ,max = 255)
 	private String username;
 		

@@ -16,6 +16,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -39,7 +41,7 @@ public class Users implements UserDetails {
 	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
 	private Employee employee;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	private Position position;	
 	
 	public Users() {}	
@@ -50,6 +52,12 @@ public class Users implements UserDetails {
 		this.locked = userDTO.isLocked();
 		this.employee = new Employee(userDTO.getEmployee());
 		this.position = new Position(userDTO.getPosition());
+	}
+	
+	@PrePersist
+	@PreUpdate
+	private void init() {
+		username = username.toLowerCase();
 	}
 
 	@Override

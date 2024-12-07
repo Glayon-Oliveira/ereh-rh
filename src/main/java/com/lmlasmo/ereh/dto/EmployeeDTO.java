@@ -18,8 +18,7 @@ public class EmployeeDTO {
 	private long id;
 	
 	@JsonProperty
-	@NotBlank
-	@Pattern(regexp =  "^[\\p{L} ]+$", message = "Special characters and numbers are not allowed")
+	@NotBlank	
 	@Size(max = 255)
 	private String name;
 	
@@ -48,13 +47,13 @@ public class EmployeeDTO {
 	
 	public EmployeeDTO() {}
 	
-	public EmployeeDTO(Employee employee) {		
-		this.id = employee.getId();
-		this.name = employee.getName();
-		this.birthDate = employee.getBirthDate();
-		this.email = employee.getEmail();
-		this.telephone = employee.getTelephone();		
-		this.admissionDate = employee.getAdmissionDate();
+	public EmployeeDTO(Employee employee) {				
+		this.setId(employee.getId());
+		this.setName(employee.getName());
+		this.setBirthDate(employee.getBirthDate());
+		this.setEmail(employee.getEmail());
+		this.setTelephone(employee.getTelephone());		
+		this.setAdmissionDate(employee.getAdmissionDate());
 		this.address = new AddressDTO(employee.getAddress());				
 	}
 
@@ -71,7 +70,7 @@ public class EmployeeDTO {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.toUpperCase();
 	}
 
 	public LocalDate getBirthDate() {

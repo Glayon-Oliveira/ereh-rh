@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.lmlasmo.ereh.dto.PositionDTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,7 +38,7 @@ public class Position {
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private Department department;
 	
-	@OneToMany(mappedBy = "position", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "position", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Set<Users> users = new HashSet<>();
 	
 	public Position() {}
