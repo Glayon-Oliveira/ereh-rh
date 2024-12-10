@@ -28,13 +28,17 @@ public class Roles implements GrantedAuthority{
 	
 	public Roles() {}
 	
+	public Roles(RoleType role) {
+		this.role = role;
+	}
+	
 	@Override
 	public String getAuthority() {
 		return role.name();
 	}
 	
-	public String getRole() {
-		return getAuthority();
+	public RoleType getRole() {
+		return role;
 	}
 
 	public void setRole(RoleType role) {

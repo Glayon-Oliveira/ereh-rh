@@ -17,8 +17,12 @@ public interface PositionRepository extends JpaRepository<Position, Long>{
 	
 	public Page<Position> findByNameContaining(String name, Pageable pageable);
 	
+	public List<Position> findByDepartmentId(int id);
+
+	public Page<Position> findByDepartmentId(int id, Pageable pageable);
+	
 	public boolean existsByIdAndName(long id, String name);
 	
-	public boolean existsByName(String name);
+	public boolean existsByName(String name);	
 	
 }

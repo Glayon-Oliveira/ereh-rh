@@ -36,18 +36,22 @@ public class UserService {
 	}
 	
 	public UserDTO save(SignupDTO signup) {
-		
-		Users user = new Users();
+				
+		Users user = new Users();		
+				
 		user.setUsername(signup.getUsername());
-		user.setPassword(signup.getPassword());
-		user.setEmployee(new Employee(signup.getEmployee()));
-		user.setPosition(new Position(signup.getPosition()));
+		user.setPassword(signup.getPassword());				
+		user.setEmployee(new Employee(signup.getEmployee()));		
+				
+		Position position = new Position();			
+		position.setId(signup.getPosition());			
+				
+		user.setPosition(position);		
 		
-		return save(user);
-		
+		return save(user);		
 	}	
 	
-	public UserDTO getUserByUsername(String username) {
+	public UserDTO findByUsername(String username) {
 		
 		Optional<Users> users = usersRepository.findByUsername(username);
 		
@@ -58,7 +62,7 @@ public class UserService {
 		return null;		
 	}
 
-	public UserDTO getUserById(String id) {
+	public UserDTO findById(long id) {
 		
 		Optional<Users> users = usersRepository.findById(id);
 		
@@ -68,8 +72,62 @@ public class UserService {
 		
 		return null;		
 	}
+	
+	public List<UserDTO> findAll(){
+		
+		List<UserDTO> dtoList = usersRepository.findAll()
+				.stream()
+				.map(u -> new UserDTO(u))
+				.toList();
+		
+		return dtoList;
+	}
+	
+	public Page<UserDTO> findAll(Pageable pageable){
+		
+		Page<UserDTO> dtoPage = usersRepository.findAll(pageable)				
+				.map(u -> new UserDTO(u));
+		
+		return dtoPage;
+	}
+	
+	public List<UserDTO> findByPosition(long position) {
 
-	public Page<UserDTO> getLockedUser(boolean locked, Pageable pageable) {		
+		List<UserDTO> dtoList = usersRepository.findByPositionId(position)
+				.stream()
+				.map(u -> new UserDTO(u))
+				.toList();
+		
+		return dtoList;
+	}
+
+	public Page<UserDTO> findByPosition(long position, Pageable pageable) {
+
+		Page<UserDTO> dtoPage = usersRepository.findByPositionId(position, pageable)				
+				.map(u -> new UserDTO(u));
+		
+		return dtoPage;
+	}
+	
+	public List<UserDTO> findByDepartment(int position) {
+
+		List<UserDTO> dtoList = usersRepository.findByPositionDepartmentId(position)
+				.stream()
+				.map(u -> new UserDTO(u))
+				.toList();
+		
+		return dtoList;
+	}
+
+	public Page<UserDTO> findByDepartment(int position, Pageable pageable) {
+
+		Page<UserDTO> dtoPage = usersRepository.findByPositionDepartmentId(position, pageable)				
+				.map(u -> new UserDTO(u));
+		
+		return dtoPage;
+	}
+
+	public Page<UserDTO> findByLockedUser(boolean locked, Pageable pageable) {		
 		
 		Page<UserDTO> users = usersRepository.findByLocked(locked, pageable)				
 				.map(u -> new UserDTO(u));				
@@ -77,7 +135,7 @@ public class UserService {
 		return users;
 	}
 	
-	public List<UserDTO> getLockedUser(boolean locked) {		
+	public List<UserDTO> findByLockedUser(boolean locked) {		
 		
 		List<UserDTO> users = usersRepository.findByLocked(locked)
 				.stream()
@@ -87,7 +145,7 @@ public class UserService {
 		return users;
 	}
 	
-	public boolean deleteById(String id) {
+	public boolean deleteById(long id) {
 		
 		Optional<Users> user = usersRepository.findById(id);
 		
@@ -102,7 +160,11 @@ public class UserService {
 	}	
 	
 	public boolean existsByUsername(String username) {
-		return usersRepository.existsByName(username);
+		return usersRepository.existsByUsername(username);
 	}
+
+	public boolean existsById(long id) {
+		return usersRepository.existsById(id);
+	}	
 	
 }

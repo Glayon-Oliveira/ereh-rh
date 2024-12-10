@@ -26,7 +26,7 @@ public class DepartmentService {
 		
 		Department entity = departmentRepository.save(department);
 		
-		if(entity.getId() != department.getId()) {
+		if(entity.getId() != 0) {
 			return new DepartmentDTO(entity);
 		}
 		
@@ -53,8 +53,8 @@ public class DepartmentService {
 		
 	}
 	
-	public List<DepartmentDTO> findByNameContaning(String name){
-		List<DepartmentDTO> dtoList = departmentRepository.findByNameContaning(name)
+	public List<DepartmentDTO> findByNameContaining(String name){
+		List<DepartmentDTO> dtoList = departmentRepository.findByNameContaining(name)
 				.stream()
 				.map(d -> new DepartmentDTO(d))
 				.toList();
@@ -62,8 +62,24 @@ public class DepartmentService {
 		return dtoList;
 	}
 	
-	public Page<DepartmentDTO> findByNameContaning(String name, Pageable pageable){
-		Page<DepartmentDTO> dtoPage = departmentRepository.findByNameContaning(name, pageable)				
+	public Page<DepartmentDTO> findByNameContaining(String name, Pageable pageable){
+		Page<DepartmentDTO> dtoPage = departmentRepository.findByNameContaining(name, pageable)				
+				.map(d -> new DepartmentDTO(d));				
+		
+		return dtoPage;
+	}
+	
+	public List<DepartmentDTO> findAll(){
+		List<DepartmentDTO> dtoList = departmentRepository.findAll()
+				.stream()
+				.map(d -> new DepartmentDTO(d))
+				.toList();
+		
+		return dtoList;
+	}
+	
+	public Page<DepartmentDTO> findAll(Pageable pageable){
+		Page<DepartmentDTO> dtoPage = departmentRepository.findAll(pageable)				
 				.map(d -> new DepartmentDTO(d));				
 		
 		return dtoPage;

@@ -23,47 +23,32 @@ public class EmployeeService {
 		this.employeeRepository = employeeRepository;
 	}
 	
-	public EmployeeDTO save(Employee employee) {
+	public Optional<EmployeeDTO> save(Employee employee) {
 		
-		Employee entity = employeeRepository.save(employee);
+		Optional<EmployeeDTO> employeeDTO = Optional.ofNullable(null);
 		
-		if(entity.getId() != employee.getId()) {
-			return new EmployeeDTO(entity);
+		employeeRepository.save(employee);
+		
+		if(employee.getId() != 0) {
+			employeeDTO = Optional.ofNullable(new EmployeeDTO(employee));
 		}
 		
-		return null;		
+		return employeeDTO;
 	}
 	
-	public EmployeeDTO save(EmployeeDTO employeeDTO) {
+	public Optional<EmployeeDTO> save(EmployeeDTO employeeDTO) {
 		
 		Employee employee = new Employee(employeeDTO);
 		
 		return save(employee);
+	}	
+	
+	public Optional<EmployeeDTO> findByEmail(String email) {
+		
+		return employeeRepository.findByEmail(email).map(e -> new EmployeeDTO(e));		
 	}
 	
-	public EmployeeDTO findByName(String name) {
-		
-		Optional<Employee> employee = employeeRepository.findByName(name);
-		
-		if(employee.isPresent()) {
-			return new EmployeeDTO(employee.get());
-		}
-		
-		return null;		
-	}
-	
-	public EmployeeDTO findByEmail(String email) {
-		
-		Optional<Employee> employee = employeeRepository.findByEmail(email);
-		
-		if(employee.isPresent()) {
-			return new EmployeeDTO(employee.get());
-		}
-		
-		return null;		
-	}
-	
-	public List<EmployeeDTO> findByNameContaining(String name){
+	public List<EmployeeDTO> findByName(String name){
 		
 		List<EmployeeDTO> dtoList = employeeRepository.findByNameContaining(name)
 				.stream()
@@ -73,9 +58,37 @@ public class EmployeeService {
 		return dtoList;		
 	}
 	
-	public Page<EmployeeDTO> findByNameContaining(String name, Pageable pageable){
+	public Page<EmployeeDTO> findByName(String name, Pageable pageable){
 		
 		Page<EmployeeDTO> dtoPage = employeeRepository.findByNameContaining(name, pageable)
+				.map(e -> new EmployeeDTO(e));				
+		
+		return dtoPage;
+	}
+	
+	public Optional<EmployeeDTO> findByUser(long id){
+		
+		return employeeRepository.findByUserId(id).map(e -> new EmployeeDTO(e)); 
+	}
+	
+	public Optional<EmployeeDTO> findByUser(long id, Pageable pageable){
+		
+		return employeeRepository.findByUserId(id).map(e -> new EmployeeDTO(e));
+	}
+	
+	public List<EmployeeDTO> findAll(){
+		
+		List<EmployeeDTO> dtoList = employeeRepository.findAll()
+				.stream()
+				.map(e -> new EmployeeDTO(e))
+				.toList();
+		
+		return dtoList;
+	}
+	
+	public Page<EmployeeDTO> findAll(Pageable pageable){
+		
+		Page<EmployeeDTO> dtoPage = employeeRepository.findAll(pageable)
 				.map(e -> new EmployeeDTO(e));				
 		
 		return dtoPage;
@@ -146,7 +159,7 @@ public class EmployeeService {
 	}
 	
 	public boolean existsByEmail(String email) {
-		return employeeRepository.existsByEmailIgnoreCase(email);
+		return employeeRepository.existsByEmail(email.toLowerCase());
 	}
 	
 	public boolean existsByTelephone(String telephone) {

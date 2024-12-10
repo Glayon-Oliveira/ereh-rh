@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.lmlasmo.ereh.model.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long>{
-
-	public Optional<Employee> findByName(String name);
 	
 	public Optional<Employee> findByEmail(String email);
+	
+	public Optional<Employee> findByUserId(long id);
 	
 	public List<Employee> findByNameContaining(String name);
 	
@@ -32,7 +32,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 	
 	public Page<Employee> findByAdmissionDateBetween(LocalDate date1, LocalDate date2, Pageable pageable);
 	
-	public boolean existsByEmailIgnoreCase(String email);
+	public boolean existsByEmail(String email);
 	
 	public boolean existsByTelephone(String telephone);
 	

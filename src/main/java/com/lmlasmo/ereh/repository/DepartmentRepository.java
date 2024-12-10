@@ -13,9 +13,9 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
 
 	public Optional<Department> findByName(String name);
 	
-	public List<Department> findByNameContaning(String name);
+	public List<Department> findByNameContaining(String name);
 	
-	public Page<Department> findByNameContaning(String name, Pageable pageable);
+	public Page<Department> findByNameContaining(String name, Pageable pageable);
 	
 	public boolean existsByName(String name);
 	

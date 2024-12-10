@@ -14,8 +14,11 @@ import jakarta.validation.constraints.Size;
 
 public class EmployeeDTO {
 		
-	@JsonProperty
+	@JsonProperty(required = false)
 	private long id;
+	
+	@JsonProperty(required = false)
+	private long user;
 	
 	@JsonProperty
 	@NotBlank	
@@ -33,7 +36,7 @@ public class EmployeeDTO {
 		
 	@JsonProperty
 	@NotBlank
-	@Pattern(regexp = "0-9]+$", message = "Only numbers are allowed")
+	@Pattern(regexp = "^[0-9]+$", message = "Only numbers are allowed")
 	@Size(min = 10, max = 15)
 	private String telephone;	
 		
@@ -49,6 +52,7 @@ public class EmployeeDTO {
 	
 	public EmployeeDTO(Employee employee) {				
 		this.setId(employee.getId());
+		this.setUser(employee.getUser().getId());
 		this.setName(employee.getName());
 		this.setBirthDate(employee.getBirthDate());
 		this.setEmail(employee.getEmail());
@@ -63,6 +67,14 @@ public class EmployeeDTO {
 
 	public void setId(long id) {
 		this.id = id;
+	}	
+
+	public long getUser() {
+		return user;
+	}
+
+	public void setUser(long user) {
+		this.user = user;
 	}
 
 	public String getName() {

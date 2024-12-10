@@ -24,11 +24,11 @@ public class PositionService {
 		this.positionRepository = positionRepository;
 	}
 	
-	private PositionDTO save(Position position) {
+	private PositionDTO save(Position position) {		
 		
-		Position entity = positionRepository.save(position);
+		positionRepository.save(position); 
 		
-		if(entity.getId() != position.getId()) {
+		if(position.getId() != 0) {
 			return new PositionDTO(position);
 		}
 		
@@ -71,6 +71,42 @@ public class PositionService {
 		return dtoPage;
 	}
 	
+	public List<PositionDTO> findAll() {
+		
+		List<PositionDTO> dtoList = positionRepository.findAll()
+				.stream()
+				.map(p -> new PositionDTO())
+				.toList();
+		
+		return dtoList;	
+	}
+	
+	public Page<PositionDTO> findAll(Pageable pageable) {
+		
+		Page<PositionDTO> dtoPage = positionRepository.findAll(pageable)				
+				.map(p -> new PositionDTO());
+		
+		return dtoPage;
+	}
+	
+	public List<PositionDTO> findByDepartmentId(int id){
+		
+		List<PositionDTO> dtoList = positionRepository.findByDepartmentId(id)
+				.stream()
+				.map(p -> new PositionDTO(p))
+				.toList();
+		
+		return dtoList;		
+	}
+	
+	public Page<PositionDTO> findByDepartmentId(int id, Pageable pageable){
+		
+		Page<PositionDTO> dtoPage = positionRepository.findByDepartmentId(id, pageable)				
+				.map(p -> new PositionDTO(p));
+		
+		return dtoPage;		
+	}
+	
 	public boolean deleteById(long id) {
 		
 		positionRepository.deleteById(id);
@@ -79,12 +115,16 @@ public class PositionService {
 		
 	}
 	
+	public boolean existsById(long id) {
+		return positionRepository.existsById(id);
+	}
+	
 	public boolean existsByName(String name) {
 		return positionRepository.existsByName(name);
 	}
 	
 	public boolean existsByIdAndName(long id, String name) {
 		return positionRepository.existsByIdAndName(id, name);
-	}
+	}	
 	
 }

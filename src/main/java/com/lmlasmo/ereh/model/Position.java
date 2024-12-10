@@ -12,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -36,9 +37,10 @@ public class Position {
 	private Roles role;
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(nullable = false)
 	private Department department;
 	
-	@OneToMany(mappedBy = "position", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "position", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)	
 	private Set<Users> users = new HashSet<>();
 	
 	public Position() {}
@@ -47,8 +49,9 @@ public class Position {
 		this.id = positionDTO.getId();
 		this.name = positionDTO.getName();
 		this.activities = positionDTO.getActivities();
-		this.role = positionDTO.getRole();
-		this.department = new Department(positionDTO.getDepartment());		
+		this.role = new Roles(positionDTO.getRole());			
+		this.department = new Department();
+		this.department.setId(positionDTO.getDepartment());
 	}
 	
 	@PrePersist
