@@ -91,6 +91,24 @@ public class UserService {
 		return dtoPage;
 	}
 	
+	public List<UserDTO> findByEmployee(long employee) {
+		
+		List<UserDTO> dtoList = usersRepository.findByEmployeeId(employee)
+				.stream()
+				.map(u -> new UserDTO(u))
+				.toList();
+		
+		return dtoList;
+	}
+	
+	public Page<UserDTO> findByEmployee(long employee, Pageable pageable) {
+		
+		Page<UserDTO> dtoPage = usersRepository.findByEmployeeId(employee, pageable)				
+				.map(u -> new UserDTO(u));
+		
+		return dtoPage;
+	}	
+	
 	public List<UserDTO> findByPosition(long position) {
 
 		List<UserDTO> dtoList = usersRepository.findByPositionId(position)

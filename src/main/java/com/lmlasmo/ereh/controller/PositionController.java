@@ -62,7 +62,7 @@ public class PositionController {
 
 	}
 		
-	@GetMapping(name = "/search", params = "name")
+	@GetMapping(path = "/search", params = "name")
 	public ResponseEntity<PositionDTO> getByName(@RequestParam String name){
 		
 		PositionDTO positionDTO = positionService.findByName(name.toUpperCase());
@@ -74,7 +74,7 @@ public class PositionController {
 		return ResponseEntity.notFound().build();	
 	}
 		
-	@GetMapping(name = "/search", params = "contain")
+	@GetMapping(path = "/search", params = "contain")
 	public ResponseEntity<Page<PositionDTO>> getByNameContaning(@RequestParam String contain, Pageable pageable){
 		
 		Page<PositionDTO> dtoPage = positionService.findByNameContaining(contain, pageable);
@@ -82,7 +82,7 @@ public class PositionController {
 		return ResponseEntity.ok(dtoPage);		
 	}
 	
-	@GetMapping(name = "/search")
+	@GetMapping(path = "/search")
 	public ResponseEntity<Page<PositionDTO>> getAll(Pageable pageable){
 		
 		Page<PositionDTO> dtoPage = positionService.findAll(pageable);
@@ -90,7 +90,7 @@ public class PositionController {
 		return ResponseEntity.ok(dtoPage);		
 	}
 	
-	@GetMapping(name = "search", params = "department")
+	@GetMapping(path = "search", params = "department")
 	public ResponseEntity<Page<PositionDTO>> getByDepartment(@RequestParam int department, Pageable pageable){
 		
 		Page<PositionDTO> dtoPage = positionService.findByDepartmentId(department, pageable);

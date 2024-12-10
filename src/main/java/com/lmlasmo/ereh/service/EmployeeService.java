@@ -71,9 +71,9 @@ public class EmployeeService {
 		return employeeRepository.findByUserId(id).map(e -> new EmployeeDTO(e)); 
 	}
 	
-	public Optional<EmployeeDTO> findByUser(long id, Pageable pageable){
+	public Optional<EmployeeDTO> findById(long id){
 		
-		return employeeRepository.findByUserId(id).map(e -> new EmployeeDTO(e));
+		return employeeRepository.findById(id).map(e -> new EmployeeDTO(e));
 	}
 	
 	public List<EmployeeDTO> findAll(){

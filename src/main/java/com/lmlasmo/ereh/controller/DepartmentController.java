@@ -64,7 +64,7 @@ public class DepartmentController {
 		
 	}
 	
-	@GetMapping(name = "/search", params = "name")
+	@GetMapping(path = "/search", params = "name")
 	public ResponseEntity<DepartmentDTO> getByName(@RequestParam String name){
 		
 		DepartmentDTO departmentDTO = departmentService.findByName(name.toUpperCase());
@@ -76,7 +76,7 @@ public class DepartmentController {
 		return ResponseEntity.notFound().build();	
 	}
 	
-	@GetMapping(name = "/search", params = "contain")
+	@GetMapping(path = "/search", params = "contain")
 	public ResponseEntity<Page<DepartmentDTO>> getByNameContaining(@RequestParam String contain, Pageable pageable){
 		
 		Page<DepartmentDTO> dtoPage = departmentService.findByNameContaining(contain, pageable);
