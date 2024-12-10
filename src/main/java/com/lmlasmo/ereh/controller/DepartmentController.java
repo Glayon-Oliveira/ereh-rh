@@ -1,5 +1,7 @@
 package com.lmlasmo.ereh.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -64,19 +66,19 @@ public class DepartmentController {
 		
 	}
 	
-	@GetMapping(name = "/search", params = "name")
+	@GetMapping(path = "/search", params = "name")
 	public ResponseEntity<DepartmentDTO> getByName(@RequestParam String name){
 		
-		DepartmentDTO departmentDTO = departmentService.findByName(name.toUpperCase());
+		Optional<DepartmentDTO> departmentDTO = departmentService.findByName(name.toUpperCase());
 		
-		if(departmentDTO != null) {
-			return ResponseEntity.ok(departmentDTO);
+		if(departmentDTO.isPresent()) {
+			return ResponseEntity.ok(departmentDTO.get());
 		}
 		
 		return ResponseEntity.notFound().build();	
 	}
 	
-	@GetMapping(name = "/search", params = "contain")
+	@GetMapping(path = "/search", params = "contain")
 	public ResponseEntity<Page<DepartmentDTO>> getByNameContaining(@RequestParam String contain, Pageable pageable){
 		
 		Page<DepartmentDTO> dtoPage = departmentService.findByNameContaining(contain, pageable);

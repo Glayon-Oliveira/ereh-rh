@@ -23,24 +23,24 @@ public class EmployeeService {
 		this.employeeRepository = employeeRepository;
 	}
 	
-	public Optional<EmployeeDTO> save(Employee employee) {
+	public Optional<EmployeeDTO> update(Employee employee) {
 		
-		Optional<EmployeeDTO> employeeDTO = Optional.ofNullable(null);
+		EmployeeDTO dto = null;
 		
-		employeeRepository.save(employee);
-		
-		if(employee.getId() != 0) {
-			employeeDTO = Optional.ofNullable(new EmployeeDTO(employee));
+		if(employeeRepository.existsById(employee.getId())) {
+			
+			employeeRepository.save(employee);			
+			dto = new EmployeeDTO(employee);			
 		}
 		
-		return employeeDTO;
+		return Optional.ofNullable(dto);
 	}
 	
-	public Optional<EmployeeDTO> save(EmployeeDTO employeeDTO) {
+	public Optional<EmployeeDTO> update(EmployeeDTO employeeDTO) {
 		
 		Employee employee = new Employee(employeeDTO);
 		
-		return save(employee);
+		return update(employee);
 	}	
 	
 	public Optional<EmployeeDTO> findByEmail(String email) {
@@ -71,9 +71,9 @@ public class EmployeeService {
 		return employeeRepository.findByUserId(id).map(e -> new EmployeeDTO(e)); 
 	}
 	
-	public Optional<EmployeeDTO> findByUser(long id, Pageable pageable){
+	public Optional<EmployeeDTO> findById(long id){
 		
-		return employeeRepository.findByUserId(id).map(e -> new EmployeeDTO(e));
+		return employeeRepository.findById(id).map(e -> new EmployeeDTO(e));
 	}
 	
 	public List<EmployeeDTO> findAll(){

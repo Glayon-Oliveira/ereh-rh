@@ -24,7 +24,7 @@ public class EmployeeController {
 		this.employeeService = employeeService;
 	}		
 	
-	@GetMapping(name = "/search")
+	@GetMapping(path = "/search")
 	public ResponseEntity<Page<EmployeeDTO>> getAll(Pageable pageable){
 		
 		Page<EmployeeDTO> employeePage = employeeService.findAll(pageable);		
@@ -33,7 +33,7 @@ public class EmployeeController {
 		return ResponseEntity.ok(employeePage);
 	}
 	
-	@GetMapping(name = "/search", params = "email")
+	@GetMapping(path = "/search", params = "email")
 	public ResponseEntity<EmployeeDTO> getByEmail(@RequestParam String email){
 		
 		Optional<EmployeeDTO> employee = employeeService.findByEmail(email);
@@ -45,11 +45,11 @@ public class EmployeeController {
 		}
 		
 	}
-	
-	@GetMapping(name = "/search", params = "id")
+
+	@GetMapping(path = "/search", params = "id")
 	public ResponseEntity<EmployeeDTO> getById(@RequestParam long id){
 		
-		Optional<EmployeeDTO> employee = employeeService.findByUser(id);		
+		Optional<EmployeeDTO> employee = employeeService.findById(id);		
 		
 		if(employee.isPresent()) {
 			return ResponseEntity.ok(employee.get());
@@ -58,7 +58,19 @@ public class EmployeeController {
 		return ResponseEntity.notFound().build(); 
 	}
 	
-	@GetMapping(name = "/search", params = "name")
+	@GetMapping(path = "/search", params = "user")
+	public ResponseEntity<EmployeeDTO> getByUser(@RequestParam long user){
+		
+		Optional<EmployeeDTO> employee = employeeService.findByUser(user);		
+		
+		if(employee.isPresent()) {
+			return ResponseEntity.ok(employee.get());
+		}
+		
+		return ResponseEntity.notFound().build(); 
+	}
+	
+	@GetMapping(path = "/search", params = "name")
 	public ResponseEntity<Page<EmployeeDTO>> getByName(@RequestParam String name, Pageable pageable){
 		
 		Page<EmployeeDTO> employeePage = employeeService.findByName(name, pageable);		
@@ -67,34 +79,73 @@ public class EmployeeController {
 		return ResponseEntity.ok(employeePage);		
 	}
 	
-	@GetMapping(name = "/search", params = "after")
-	public ResponseEntity<Page<EmployeeDTO>> getByAdmissionDateAfter(LocalDate after, Pageable pageable){
+	@GetMapping(path = "/search", params = "after")
+	public ResponseEntity<Page<EmployeeDTO>> getByAdmissionDateAfter(@RequestParam String after, Pageable pageable){
 		
-		Page<EmployeeDTO> employeePage = employeeService.findByAdmissionDateAfter(after, pageable);		
+		LocalDate afterDate = null;
+		
+		try {
+			afterDate =  LocalDate.parse(after);
+			
+			if(afterDate.isAfter(LocalDate.now())) {
+				return ResponseEntity.badRequest().build();
+			}
+		}catch(Exception e) {
+			return ResponseEntity.badRequest().build();
+		}		
+		
+		Page<EmployeeDTO> employeePage = employeeService.findByAdmissionDateAfter(afterDate, pageable);		
 		employeePage.forEach(e -> e.setAddress(null));
 		
 		return ResponseEntity.ok(employeePage);		
 	}
 	
-	@GetMapping(name = "/search", params = "before")
-	public ResponseEntity<Page<EmployeeDTO>> getByAdmissionDateBefore(LocalDate before, Pageable pageable){
+	@GetMapping(path = "/search", params = "before")
+	public ResponseEntity<Page<EmployeeDTO>> getByAdmissionDateBefore(@RequestParam String before, Pageable pageable){
 		
-		Page<EmployeeDTO> employeePage = employeeService.findByAdmissionDateBefore(before, pageable);		
+		LocalDate beforeDate = null;
+		
+		try {
+			beforeDate =  LocalDate.parse(before);			
+			
+			if(beforeDate.isAfter(LocalDate.now())) {
+				return ResponseEntity.badRequest().build();
+			}
+		}catch(Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+		Page<EmployeeDTO> employeePage = employeeService.findByAdmissionDateBefore(beforeDate, pageable);		
 		employeePage.forEach(e -> e.setAddress(null));
 		
 		return ResponseEntity.ok(employeePage);
 	}
 	
-	@GetMapping(name = "/search", params = {"after", "before"})
-	public ResponseEntity<Page<EmployeeDTO>> getByAdmissionDateBetween(LocalDate after, LocalDate before, Pageable pageable){
+	@GetMapping(path = "/search", params = {"after", "before"})
+	public ResponseEntity<Page<EmployeeDTO>> getByAdmissionDateBetween(@RequestParam String after, @RequestParam String before, Pageable pageable){
 		
-		Page<EmployeeDTO> employeePage = employeeService.findByAdmissionDateBetween(after, before, pageable);		
+		LocalDate afterDate = null;
+		LocalDate beforeDate = null;
+		
+		try {
+			afterDate = LocalDate.parse(after);
+			beforeDate = LocalDate.parse(before);
+			
+			if(afterDate.isAfter(beforeDate) || afterDate.isEqual(beforeDate)) {
+				return ResponseEntity.badRequest().build();
+			}
+			
+		}catch(Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+		Page<EmployeeDTO> employeePage = employeeService.findByAdmissionDateBetween(afterDate, beforeDate, pageable);		
 		employeePage.forEach(e -> e.setAddress(null));
 		
 		return ResponseEntity.ok(employeePage);
 	}
 	
-	@GetMapping(name = "/exists", params = "email")
+	@GetMapping(path = "/exists", params = "email")
 	public ResponseEntity<Object> existsByEmail(@RequestParam String email) {
 		
 		if(employeeService.existsByEmail(email)) {
@@ -104,7 +155,7 @@ public class EmployeeController {
 		return ResponseEntity.notFound().build();	
 	}
 	
-	@GetMapping(name = "/exists", params = "telephone")
+	@GetMapping(path = "/exists", params = "telephone")
 	public ResponseEntity<Object> existsByTelephone(@RequestParam String telephone) {
 		
 		if(employeeService.existsByTelephone(telephone)) {

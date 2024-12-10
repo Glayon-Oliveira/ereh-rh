@@ -15,10 +15,7 @@ import jakarta.validation.constraints.Size;
 public class EmployeeDTO {
 		
 	@JsonProperty(required = false)
-	private long id;
-	
-	@JsonProperty(required = false)
-	private long user;
+	private long id;	
 	
 	@JsonProperty
 	@NotBlank	
@@ -51,8 +48,7 @@ public class EmployeeDTO {
 	public EmployeeDTO() {}
 	
 	public EmployeeDTO(Employee employee) {				
-		this.setId(employee.getId());
-		this.setUser(employee.getUser().getId());
+		this.setId(employee.getId());		
 		this.setName(employee.getName());
 		this.setBirthDate(employee.getBirthDate());
 		this.setEmail(employee.getEmail());
@@ -68,14 +64,6 @@ public class EmployeeDTO {
 	public void setId(long id) {
 		this.id = id;
 	}	
-
-	public long getUser() {
-		return user;
-	}
-
-	public void setUser(long user) {
-		this.user = user;
-	}
 
 	public String getName() {
 		return name;

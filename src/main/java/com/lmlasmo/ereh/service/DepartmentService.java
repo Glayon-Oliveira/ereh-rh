@@ -41,16 +41,11 @@ public class DepartmentService {
 		return save(department);
 	}
 	
-	public DepartmentDTO findByName(String name){
+	public Optional<DepartmentDTO> findByName(String name){
 		
-		Optional<Department> department = departmentRepository.findByName(name);
+		Optional<Department> department = departmentRepository.findByName(name);		
 		
-		if(department.isPresent()) {
-			return new DepartmentDTO(department.get());
-		}
-		
-		return null;
-		
+		return department.map(d -> new DepartmentDTO(d));		
 	}
 	
 	public List<DepartmentDTO> findByNameContaining(String name){

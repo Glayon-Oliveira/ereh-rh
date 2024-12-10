@@ -1,5 +1,7 @@
 package com.lmlasmo.ereh.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -46,16 +48,28 @@ public class UserController {
 		return ResponseEntity.badRequest().build();	
 	}
 	
-	@GetMapping(name = "/search", params = "username")
+	@GetMapping(path = "/search", params = "username")
 	public ResponseEntity<UserDTO> getUserByUsername(@RequestParam String username) {
 		
-		UserDTO user = userService.findByUsername(username);
+		Optional<UserDTO> user = userService.findByUsername(username);
 		
-		if(user != null) {
+		if(user.isPresent()) {
 			ResponseEntity.ok(user);
 		}
 		
 		return ResponseEntity.notFound().build();		
+	}
+	
+	@GetMapping(path = "/search", params = "employee")
+	public ResponseEntity<UserDTO> getByEmployee(@RequestParam long employee, Pageable pageable){
+		
+		Optional<UserDTO> dto = userService.findByEmployee(employee);
+		
+		if(dto.isPresent()) {
+			return ResponseEntity.ok(dto.get());
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
 	
 	@GetMapping("/search")
@@ -66,7 +80,7 @@ public class UserController {
 		return ResponseEntity.ok(all);		
 	}
 	
-	@GetMapping(name = "/search", params = "position")
+	@GetMapping(path = "/search", params = "position")
 	public ResponseEntity<Page<UserDTO>> getByPosition(@RequestParam long position, Pageable pageable){
 	
 		Page<UserDTO> dtoPage = userService.findByPosition(position, pageable);
@@ -74,7 +88,7 @@ public class UserController {
 		return ResponseEntity.ok(dtoPage);
 	}
 	
-	@GetMapping(name = "/search", params = "department")
+	@GetMapping(path = "/search", params = "department")
 	public ResponseEntity<Page<UserDTO>> getByDepartment(@RequestParam int department, Pageable pageable){
 	
 		Page<UserDTO> dtoPage = userService.findByDepartment(department, pageable);
@@ -82,19 +96,19 @@ public class UserController {
 		return ResponseEntity.ok(dtoPage);
 	}
 	
-	@GetMapping(name = "/search", params = "id")
+	@GetMapping(path = "/search", params = "id")
 	public ResponseEntity<UserDTO> getUserById(@RequestParam long id) {
 		
-		UserDTO user = userService.findById(id);
+		Optional<UserDTO> user = userService.findById(id);
 		
-		if(user != null) {
+		if(user.isPresent()) {
 			ResponseEntity.ok(user);
 		}
 		
 		return ResponseEntity.notFound().build();		
 	}
 	
-	@GetMapping(name = "/search", params = "locked")
+	@GetMapping(path = "/search", params = "locked")
 	public ResponseEntity<Page<UserDTO>> getLockedUser(@RequestParam boolean locked, Pageable pageable){
 		
 		Page<UserDTO> user = userService.findByLockedUser(locked, pageable);		
@@ -105,12 +119,16 @@ public class UserController {
 	@PutMapping("/lock")
 	public ResponseEntity<UserDTO> lockUser(@RequestParam long id){
 		
-		UserDTO user = userService.findById(id);		
-		user.setLocked(true);
+		Optional<UserDTO> user = userService.findById(id);
 		
-		user = userService.save(new Users(user));
+		if(user.isPresent()) {			
+			
+			Users users = new Users(user.get());
+			
+			return ResponseEntity.ok(userService.save(users));			
+		}		
 		
-		return ResponseEntity.ok(user);
+		return ResponseEntity.notFound().build();
 	}	
 	
 	@GetMapping("/exists")

@@ -31,8 +31,7 @@ public class UserService {
 		
 		user = usersRepository.save(user);
 		
-		return new UserDTO(user);
-		
+		return new UserDTO(user);		
 	}
 	
 	public UserDTO save(SignupDTO signup) {
@@ -51,26 +50,18 @@ public class UserService {
 		return save(user);		
 	}	
 	
-	public UserDTO findByUsername(String username) {
+	public Optional<UserDTO> findByUsername(String username) {
 		
 		Optional<Users> users = usersRepository.findByUsername(username);
 		
-		if(users.isPresent()) {
-			return new UserDTO(users.get());
-		}
-		
-		return null;		
+		return users.map(u -> new UserDTO(u)); 
 	}
 
-	public UserDTO findById(long id) {
+	public Optional<UserDTO> findById(long id) {
 		
 		Optional<Users> users = usersRepository.findById(id);
 		
-		if(users.isPresent()) {
-			return new UserDTO(users.get());
-		}
-		
-		return null;		
+		return users.map(u -> new UserDTO(u)); 		
 	}
 	
 	public List<UserDTO> findAll(){
@@ -89,6 +80,14 @@ public class UserService {
 				.map(u -> new UserDTO(u));
 		
 		return dtoPage;
+	}
+	
+	public Optional<UserDTO> findByEmployee(long employee) {
+		
+		Optional<UserDTO> dtoList = usersRepository.findByEmployeeId(employee)
+				.map(u -> new UserDTO(u));
+		
+		return dtoList;
 	}
 	
 	public List<UserDTO> findByPosition(long position) {

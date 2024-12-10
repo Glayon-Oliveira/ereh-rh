@@ -17,6 +17,8 @@ public interface UsersRepository extends JpaRepository<Users, Long>{
 	
 	public Page<Users> findByLocked(boolean locked, Pageable pageable);
 	
+	public Optional<Users> findByEmployeeId(long employee);
+	
 	public List<Users> findByPositionId(long position);
 	
 	public Page<Users> findByPositionId(long position, Pageable pageable);
@@ -27,6 +29,6 @@ public interface UsersRepository extends JpaRepository<Users, Long>{
 	
 	public void deleteByUsername(String username);
 
-	public boolean existsByUsername(String username);	
+	public boolean existsByUsername(String username);
 	
 }

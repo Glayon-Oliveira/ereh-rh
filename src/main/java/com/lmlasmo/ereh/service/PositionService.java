@@ -26,13 +26,9 @@ public class PositionService {
 	
 	private PositionDTO save(Position position) {		
 		
-		positionRepository.save(position); 
+		positionRepository.save(position);
 		
-		if(position.getId() != 0) {
-			return new PositionDTO(position);
-		}
-		
-		 return null;		
+		return new PositionDTO(position);		
 	}
 	
 	public PositionDTO save(PositionDTO dto) {
@@ -42,15 +38,11 @@ public class PositionService {
 		return save(position);				
 	}	
 
-	public PositionDTO findByName(String name) {
+	public Optional<PositionDTO> findByName(String name) {
 		
-		Optional<Position> position = positionRepository.findByName(name);
+		Optional<Position> position = positionRepository.findByName(name);		
 		
-		if(position.isPresent()) {
-			return new PositionDTO(position.get());
-		}
-		
-		return null;
+		return position.map(p -> new PositionDTO(p));
 	}	
 	
 	public List<PositionDTO> findByNameContaining(String name) {

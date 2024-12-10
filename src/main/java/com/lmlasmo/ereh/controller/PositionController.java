@@ -1,5 +1,7 @@
 package com.lmlasmo.ereh.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -62,19 +64,19 @@ public class PositionController {
 
 	}
 		
-	@GetMapping(name = "/search", params = "name")
+	@GetMapping(path = "/search", params = "name")
 	public ResponseEntity<PositionDTO> getByName(@RequestParam String name){
 		
-		PositionDTO positionDTO = positionService.findByName(name.toUpperCase());
+		Optional<PositionDTO> positionDTO = positionService.findByName(name.toUpperCase());
 		
-		if(positionDTO != null) {
-			return ResponseEntity.ok(positionDTO);
+		if(positionDTO.isPresent()) {
+			return ResponseEntity.ok(positionDTO.get());
 		}
 		
 		return ResponseEntity.notFound().build();	
 	}
 		
-	@GetMapping(name = "/search", params = "contain")
+	@GetMapping(path = "/search", params = "contain")
 	public ResponseEntity<Page<PositionDTO>> getByNameContaning(@RequestParam String contain, Pageable pageable){
 		
 		Page<PositionDTO> dtoPage = positionService.findByNameContaining(contain, pageable);
@@ -82,7 +84,7 @@ public class PositionController {
 		return ResponseEntity.ok(dtoPage);		
 	}
 	
-	@GetMapping(name = "/search")
+	@GetMapping(path = "/search")
 	public ResponseEntity<Page<PositionDTO>> getAll(Pageable pageable){
 		
 		Page<PositionDTO> dtoPage = positionService.findAll(pageable);
@@ -90,7 +92,7 @@ public class PositionController {
 		return ResponseEntity.ok(dtoPage);		
 	}
 	
-	@GetMapping(name = "search", params = "department")
+	@GetMapping(path = "search", params = "department")
 	public ResponseEntity<Page<PositionDTO>> getByDepartment(@RequestParam int department, Pageable pageable){
 		
 		Page<PositionDTO> dtoPage = positionService.findByDepartmentId(department, pageable);
