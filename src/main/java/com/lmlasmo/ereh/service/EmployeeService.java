@@ -25,10 +25,10 @@ public class EmployeeService {
 	
 	public EmployeeDTO save(Employee employee) {
 		
-		Employee entity = employeeRepository.save(employee);
+		employeeRepository.save(employee);
 		
-		if(entity.getId() != employee.getId()) {
-			return new EmployeeDTO(entity);
+		if(employee.getId() != 0) {
+			return new EmployeeDTO(employee);
 		}
 		
 		return null;		

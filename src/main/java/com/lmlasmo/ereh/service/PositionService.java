@@ -24,11 +24,11 @@ public class PositionService {
 		this.positionRepository = positionRepository;
 	}
 	
-	private PositionDTO save(Position position) {
+	private PositionDTO save(Position position) {		
 		
-		Position entity = positionRepository.save(position);
+		positionRepository.save(position); 
 		
-		if(entity.getId() != position.getId()) {
+		if(position.getId() != 0) {
 			return new PositionDTO(position);
 		}
 		
@@ -77,6 +77,10 @@ public class PositionService {
 		
 		return !positionRepository.existsById(id);
 		
+	}
+	
+	public boolean existsById(long id) {
+		return positionRepository.existsById(id);
 	}
 	
 	public boolean existsByName(String name) {

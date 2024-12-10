@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.lmlasmo.ereh.model.Users;
 
-public interface UsersRepository extends JpaRepository<Users, String>{
+public interface UsersRepository extends JpaRepository<Users, Long>{
 
 	public Optional<Users> findByUsername(String username);
 	
@@ -19,6 +19,6 @@ public interface UsersRepository extends JpaRepository<Users, String>{
 	
 	public void deleteByUsername(String username);
 
-	public boolean existsByName(String username);
+	public boolean existsByUsername(String username);
 	
 }

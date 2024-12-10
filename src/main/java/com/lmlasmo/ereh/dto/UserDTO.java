@@ -6,19 +6,16 @@ import com.lmlasmo.ereh.model.Users;
 public class UserDTO {
 
 	@JsonProperty
-	private String id;
+	private long id;
 	
 	@JsonProperty
 	private String username;
 	
 	@JsonProperty
-	private boolean locked;
+	private boolean locked;	
 	
 	@JsonProperty
-	private PositionDTO position;
-	
-	@JsonProperty
-	private EmployeeDTO employee;
+	private long position;
 	
 	public UserDTO() {}
 	
@@ -26,15 +23,14 @@ public class UserDTO {
 		this.setId(user.getId());
 		this.setUsername(user.getUsername());
 		this.setLocked(user.isLocked());
-		this.position = new PositionDTO(user.getPosition());
-		this.employee = new EmployeeDTO(user.getEmployee());		
+		this.setPosition(user.getPosition().getId());
 	}
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -54,20 +50,12 @@ public class UserDTO {
 		this.locked = locked;
 	}
 
-	public PositionDTO getPosition() {
+	public long getPosition() {
 		return position;
 	}
 
-	public void setPosition(PositionDTO position) {
+	public void setPosition(long position) {
 		this.position = position;
-	}
-
-	public EmployeeDTO getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(EmployeeDTO employee) {
-		this.employee = employee;
-	}		
+	}	
 	
 }

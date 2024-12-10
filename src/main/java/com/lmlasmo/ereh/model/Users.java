@@ -13,7 +13,10 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
@@ -27,7 +30,8 @@ public class Users implements UserDetails {
 	private static final long serialVersionUID = -5904327041694099145L;
 
 	@Id	
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 	
 	@Column(nullable = false, unique = true)
 	private String username;
@@ -38,10 +42,12 @@ public class Users implements UserDetails {
 	@Column
 	private boolean locked = false;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	@JoinColumn(nullable = false)
 	private Employee employee;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	@JoinColumn(nullable = false)
 	private Position position;	
 	
 	public Users() {}	
@@ -49,15 +55,13 @@ public class Users implements UserDetails {
 	public Users(UserDTO userDTO) {
 		this.id = userDTO.getId();
 		this.username = userDTO.getUsername();
-		this.locked = userDTO.isLocked();
-		this.employee = new Employee(userDTO.getEmployee());
-		this.position = new Position(userDTO.getPosition());
+		this.locked = userDTO.isLocked();		
 	}
 	
 	@PrePersist
 	@PreUpdate
-	private void init() {
-		username = username.toLowerCase();
+	private void init() {		
+		username = username.toLowerCase();			
 	}
 
 	@Override
@@ -95,11 +99,11 @@ public class Users implements UserDetails {
 		return this.username;
 	}
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

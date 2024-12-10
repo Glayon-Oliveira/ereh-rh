@@ -2,9 +2,9 @@ package com.lmlasmo.ereh.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lmlasmo.ereh.model.Position;
-import com.lmlasmo.ereh.model.Roles;
+import com.lmlasmo.ereh.model.RoleType;
 
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -23,20 +23,19 @@ public class PositionDTO {
 	
 	@JsonProperty
 	@NotNull
-	private Roles role;
+	private RoleType role;
 		
 	@JsonProperty
-	@NotNull
-	@Valid
-	private DepartmentDTO department;
+	@Min(value = 1)	
+	private int department;
 	
 	public PositionDTO() {}
 	
 	public PositionDTO(Position position) {	
 		this.setId(position.getId());
 		this.setName(position.getName());		
-		this.setRole(position.getRole());
-		this.department = new DepartmentDTO(position.getDepartment());		
+		this.setRole(position.getRole().getRole());
+		this.department = position.getDepartment().getId();
 	}
 
 	public long getId() {
@@ -63,19 +62,19 @@ public class PositionDTO {
 		this.activities = activities.toUpperCase();
 	}
 
-	public Roles getRole() {
+	public RoleType getRole() {
 		return role;
 	}
 
-	public void setRole(Roles role) {
+	public void setRole(RoleType role) {
 		this.role = role;
 	}
 
-	public DepartmentDTO getDepartment() {
+	public int getDepartment() {
 		return department;
 	}
 
-	public void setDepartment(DepartmentDTO department) {
+	public void setDepartment(int department) {
 		this.department = department;
 	}	
 	

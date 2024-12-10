@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class DepartmentDTO {
 	
-	@JsonProperty
+	@JsonProperty(required = false)
 	private int id;
 	
 	@JsonProperty
@@ -15,6 +15,7 @@ public class DepartmentDTO {
 	private String name;
 	
 	@JsonProperty
+	@NotBlank
 	private String details;
 	
 	public DepartmentDTO() {}

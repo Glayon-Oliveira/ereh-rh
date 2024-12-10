@@ -33,7 +33,7 @@ public class EmployeeDTO {
 		
 	@JsonProperty
 	@NotBlank
-	@Pattern(regexp = "0-9]+$", message = "Only numbers are allowed")
+	@Pattern(regexp = "^[0-9]+$", message = "Only numbers are allowed")
 	@Size(min = 10, max = 15)
 	private String telephone;	
 		

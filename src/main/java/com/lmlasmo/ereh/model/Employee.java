@@ -12,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -43,7 +44,7 @@ public class Employee {
 	@Embedded
 	private Address address;
 	
-	@OneToOne(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@OneToOne(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)	
 	private Users user;
 	
 	@PrePersist
@@ -60,9 +61,14 @@ public class Employee {
 		this.name = employeeDTO.getName();
 		this.birthDate = employeeDTO.getBirthDate();
 		this.email = employeeDTO.getEmail();
-		this.telephone = employeeDTO.getTelephone();
+		this.telephone = employeeDTO.getTelephone();		
+		this.address = new Address(employeeDTO.getAddress());		
 		this.admissionDate = employeeDTO.getAdmissionDate();
-		this.address = new Address(employeeDTO.getAddress());
+		
+		if(this.admissionDate == null) {
+			this.admissionDate = LocalDate.now();
+		}
+		
 	}
 
 	public long getId() {

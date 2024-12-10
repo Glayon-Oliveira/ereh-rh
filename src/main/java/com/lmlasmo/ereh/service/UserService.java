@@ -36,15 +36,19 @@ public class UserService {
 	}
 	
 	public UserDTO save(SignupDTO signup) {
-		
-		Users user = new Users();
+				
+		Users user = new Users();		
+				
 		user.setUsername(signup.getUsername());
-		user.setPassword(signup.getPassword());
-		user.setEmployee(new Employee(signup.getEmployee()));
-		user.setPosition(new Position(signup.getPosition()));
+		user.setPassword(signup.getPassword());				
+		user.setEmployee(new Employee(signup.getEmployee()));		
+				
+		Position position = new Position();			
+		position.setId(signup.getPosition());			
+				
+		user.setPosition(position);		
 		
-		return save(user);
-		
+		return save(user);		
 	}	
 	
 	public UserDTO getUserByUsername(String username) {
@@ -58,7 +62,7 @@ public class UserService {
 		return null;		
 	}
 
-	public UserDTO getUserById(String id) {
+	public UserDTO getUserById(long id) {
 		
 		Optional<Users> users = usersRepository.findById(id);
 		
@@ -67,6 +71,24 @@ public class UserService {
 		}
 		
 		return null;		
+	}
+	
+	public List<UserDTO> getAll(){
+		
+		List<UserDTO> dtoList = usersRepository.findAll()
+				.stream()
+				.map(u -> new UserDTO(u))
+				.toList();
+		
+		return dtoList;
+	}
+	
+	public Page<UserDTO> getAll(Pageable pageable){
+		
+		Page<UserDTO> dtoPage = usersRepository.findAll(pageable)				
+				.map(u -> new UserDTO(u));
+		
+		return dtoPage;
 	}
 
 	public Page<UserDTO> getLockedUser(boolean locked, Pageable pageable) {		
@@ -87,7 +109,7 @@ public class UserService {
 		return users;
 	}
 	
-	public boolean deleteById(String id) {
+	public boolean deleteById(long id) {
 		
 		Optional<Users> user = usersRepository.findById(id);
 		
@@ -102,7 +124,11 @@ public class UserService {
 	}	
 	
 	public boolean existsByUsername(String username) {
-		return usersRepository.existsByName(username);
+		return usersRepository.existsByUsername(username);
+	}
+
+	public boolean existsById(long id) {
+		return usersRepository.existsById(id);
 	}
 	
 }
