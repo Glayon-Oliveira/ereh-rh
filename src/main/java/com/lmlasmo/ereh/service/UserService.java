@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lmlasmo.ereh.dto.UserDTO;
-import com.lmlasmo.ereh.dto.register.SignupDTO;
+import com.lmlasmo.ereh.dto.sign.SignupDTO;
 import com.lmlasmo.ereh.model.Employee;
 import com.lmlasmo.ereh.model.Position;
 import com.lmlasmo.ereh.model.Users;

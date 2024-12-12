@@ -1,4 +1,4 @@
-package com.lmlasmo.ereh.dto.register;
+package com.lmlasmo.ereh.dto.sign;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lmlasmo.ereh.dto.EmployeeDTO;
