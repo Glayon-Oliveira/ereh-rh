@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +37,7 @@ public class SignController {
 		this.encoder = encoder;		
 	}	
 	
+	@PostMapping("/login")
 	public ResponseEntity<JwtDTO> login(@RequestBody @Valid LoginDTO login){
 		
 		Authentication auth = new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword());
@@ -48,7 +48,7 @@ public class SignController {
 		List<String> roles = auth.getAuthorities()
 				.stream()
 				.map(a -> a.getAuthority())
-				.toList();
+				.toList();		
 		
 		String token = jwtService.gerateToken(username, roles);
 		

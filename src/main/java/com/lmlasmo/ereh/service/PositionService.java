@@ -76,7 +76,7 @@ public class PositionService {
 	public Page<PositionDTO> findAll(Pageable pageable) {
 		
 		Page<PositionDTO> dtoPage = positionRepository.findAll(pageable)				
-				.map(p -> new PositionDTO());
+				.map(p -> new PositionDTO(p));
 		
 		return dtoPage;
 	}

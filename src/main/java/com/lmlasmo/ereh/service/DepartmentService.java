@@ -84,7 +84,7 @@ public class DepartmentService {
 		
 		departmentRepository.deleteById(id);
 		
-		return existsById(id);
+		return !existsById(id);
 	}
 	
 	public boolean existsById(int id) {

@@ -1,7 +1,6 @@
 package com.lmlasmo.ereh.filter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -45,15 +44,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		String token = getToken(request);		
 				
-		Optional<Users> user = getUser(token);
-		Collection<? extends GrantedAuthority> roles = new ArrayList<>();		
+		Optional<Users> user = getUser(token);			
 		
 		if(user.isEmpty()) {
-			response.sendError(401);
+			filterChain.doFilter(request, response);
 			return;
 		}
 		
-		roles = user.get().getAuthorities();
+		Collection<? extends GrantedAuthority> roles = user.get().getAuthorities();		
 		
 		Authentication auth = UsernamePasswordAuthenticationToken.authenticated(user.get().getUsername(), null, roles);		
 		SecurityContextHolder.getContext().setAuthentication(auth);
@@ -63,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	
 	protected String getToken(HttpServletRequest request) {
 		
-		String auth = request.getHeader("Authentication");
+		String auth = request.getHeader("Authorization");
 		
 		if(auth != null) {			
 			auth = auth.replace("Bearer ", "");						
@@ -78,11 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return false;
 		}
 		
-		if(!jwtService.isTokenValid(token)) {			
-			return false;
-		}		
-		
-		return true;		
+		return jwtService.isTokenValid(token);
 	}
 	
 	protected Optional<Users> getUser(String token){

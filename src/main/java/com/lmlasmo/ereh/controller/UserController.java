@@ -102,7 +102,7 @@ public class UserController {
 		Optional<UserDTO> user = userService.findById(id);
 		
 		if(user.isPresent()) {
-			ResponseEntity.ok(user);
+			return ResponseEntity.ok(user.get());
 		}
 		
 		return ResponseEntity.notFound().build();		

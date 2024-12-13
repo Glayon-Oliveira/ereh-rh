@@ -24,13 +24,10 @@ public enum RoleType {
 		
 			List<RoleType> roles = Arrays.asList(values())
 					.stream()
-					.filter(r -> r.getWeight()<role.getWeight())
-					.toList();
-			
-			roles.add(role);
+					.filter(r -> r.getWeight()<role.getWeight() || r.equals(role))
+					.toList();			
 			
 			return roles;
-		
 	}
 	
 }

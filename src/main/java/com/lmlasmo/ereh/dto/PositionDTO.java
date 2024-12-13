@@ -33,7 +33,8 @@ public class PositionDTO {
 	
 	public PositionDTO(Position position) {	
 		this.setId(position.getId());
-		this.setName(position.getName());		
+		this.setName(position.getName());
+		this.setActivities(position.getActivities());
 		this.setRole(position.getRole().getRole());
 		this.department = position.getDepartment().getId();
 	}

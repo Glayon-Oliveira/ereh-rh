@@ -71,15 +71,16 @@ public class Users implements UserDetails {
 		
 			String role = position.getRole().getAuthority();
 			
-			RoleType roleType = RoleType.valueOf(role);
+			RoleType roleType = RoleType.valueOf(role);			
 			
 			List<? extends GrantedAuthority> authorities = RoleType.getRolesByRole(roleType)
 				.stream()
 				.map(r -> new SimpleGrantedAuthority(r.name()))
 				.toList();
+			
 			return authorities;
 		}else {
-			return List.of(new SimpleGrantedAuthority(""));
+			return List.of();
 		}
 			
 	}
