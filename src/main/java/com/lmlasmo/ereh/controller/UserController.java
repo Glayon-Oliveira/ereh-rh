@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,6 +34,7 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/delete")
+	@PreAuthorize("hasAuthority('SUBADMIN_USER')")
 	public ResponseEntity<Object> deleteUser(@RequestParam long id, @RequestParam String deleteCode) {
 		
 		if(!this.deleteCode.equals(deleteCode)) {
@@ -49,6 +51,7 @@ public class UserController {
 	}
 	
 	@GetMapping(path = "/search", params = "username")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<UserDTO> getUserByUsername(@RequestParam String username) {
 		
 		Optional<UserDTO> user = userService.findByUsername(username);
@@ -61,6 +64,7 @@ public class UserController {
 	}
 	
 	@GetMapping(path = "/search", params = "employee")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<UserDTO> getByEmployee(@RequestParam long employee, Pageable pageable){
 		
 		Optional<UserDTO> dto = userService.findByEmployee(employee);
@@ -73,6 +77,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/search")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Page<UserDTO>> getAll(Pageable pageable){
 		
 		Page<UserDTO> all = userService.findAll(pageable);
@@ -81,6 +86,7 @@ public class UserController {
 	}
 	
 	@GetMapping(path = "/search", params = "position")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Page<UserDTO>> getByPosition(@RequestParam long position, Pageable pageable){
 	
 		Page<UserDTO> dtoPage = userService.findByPosition(position, pageable);
@@ -89,6 +95,7 @@ public class UserController {
 	}
 	
 	@GetMapping(path = "/search", params = "department")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Page<UserDTO>> getByDepartment(@RequestParam int department, Pageable pageable){
 	
 		Page<UserDTO> dtoPage = userService.findByDepartment(department, pageable);
@@ -97,6 +104,7 @@ public class UserController {
 	}
 	
 	@GetMapping(path = "/search", params = "id")
+	@PreAuthorize("hasAuthority('GESTOR_USER') or #id == authentication.principal.id")
 	public ResponseEntity<UserDTO> getUserById(@RequestParam long id) {
 		
 		Optional<UserDTO> user = userService.findById(id);
@@ -109,6 +117,7 @@ public class UserController {
 	}
 	
 	@GetMapping(path = "/search", params = "locked")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Page<UserDTO>> getLockedUser(@RequestParam boolean locked, Pageable pageable){
 		
 		Page<UserDTO> user = userService.findByLockedUser(locked, pageable);		
@@ -117,13 +126,15 @@ public class UserController {
 	}
 	
 	@PutMapping("/lock")
-	public ResponseEntity<UserDTO> lockUser(@RequestParam long id){
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
+	public ResponseEntity<UserDTO> lockUser(@RequestParam long id, @RequestParam boolean lock){
 		
 		Optional<UserDTO> user = userService.findById(id);
 		
 		if(user.isPresent()) {			
 			
 			Users users = new Users(user.get());
+			users.setLocked(lock);
 			
 			return ResponseEntity.ok(userService.save(users));			
 		}		
@@ -132,6 +143,7 @@ public class UserController {
 	}	
 	
 	@GetMapping("/exists")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Object> existsUserBy(@RequestParam long id, @RequestParam String username){
 		
 		if(id != 0) {

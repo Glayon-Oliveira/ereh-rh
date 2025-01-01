@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,13 +43,13 @@ public class SignController {
 		
 		Authentication auth = new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword());
 		
-		auth = manager.authenticate(auth);
+		auth = manager.authenticate(auth);		
 		
 		String username = auth.getName();
 		List<String> roles = auth.getAuthorities()
 				.stream()
 				.map(a -> a.getAuthority())
-				.toList();		
+				.toList();
 		
 		String token = jwtService.gerateToken(username, roles);
 		
@@ -56,6 +57,7 @@ public class SignController {
 	}
 	
 	@PostMapping("/signup")
+	@PreAuthorize("hasAuthority('SUBADMIN_USER')")
 	public ResponseEntity<UserDTO> signup(@RequestBody @Valid SignupDTO signup) {		
 		
 		signup.setPassword(encoder.encode(signup.getPassword()));

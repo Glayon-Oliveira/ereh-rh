@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ public class EmployeeController {
 	}		
 	
 	@GetMapping(path = "/search")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Page<EmployeeDTO>> getAll(Pageable pageable){
 		
 		Page<EmployeeDTO> employeePage = employeeService.findAll(pageable);		
@@ -34,6 +36,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping(path = "/search", params = "email")
+	@PreAuthorize("hasAuthority('GESTOR_USER') or #email.equals(authentication.principal.email)")
 	public ResponseEntity<EmployeeDTO> getByEmail(@RequestParam String email){
 		
 		Optional<EmployeeDTO> employee = employeeService.findByEmail(email);
@@ -47,6 +50,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping(path = "/search", params = "id")
+	@PreAuthorize("hasAuthority('GESTOR_USER') or #id == authentication.principal.id")
 	public ResponseEntity<EmployeeDTO> getById(@RequestParam long id){
 		
 		Optional<EmployeeDTO> employee = employeeService.findById(id);		
@@ -59,6 +63,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping(path = "/search", params = "user")
+	@PreAuthorize("hasAuthority('GESTOR_USER') or #id == authentication.principal.id")
 	public ResponseEntity<EmployeeDTO> getByUser(@RequestParam long user){
 		
 		Optional<EmployeeDTO> employee = employeeService.findByUser(user);		
@@ -71,6 +76,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping(path = "/search", params = "name")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Page<EmployeeDTO>> getByName(@RequestParam String name, Pageable pageable){
 		
 		Page<EmployeeDTO> employeePage = employeeService.findByName(name, pageable);		
@@ -80,6 +86,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping(path = "/search", params = "after")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Page<EmployeeDTO>> getByAdmissionDateAfter(@RequestParam String after, Pageable pageable){
 		
 		LocalDate afterDate = null;
@@ -101,6 +108,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping(path = "/search", params = "before")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Page<EmployeeDTO>> getByAdmissionDateBefore(@RequestParam String before, Pageable pageable){
 		
 		LocalDate beforeDate = null;
@@ -122,6 +130,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping(path = "/search", params = {"after", "before"})
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Page<EmployeeDTO>> getByAdmissionDateBetween(@RequestParam String after, @RequestParam String before, Pageable pageable){
 		
 		LocalDate afterDate = null;
@@ -146,6 +155,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping(path = "/exists", params = "email")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Object> existsByEmail(@RequestParam String email) {
 		
 		if(employeeService.existsByEmail(email)) {
@@ -156,6 +166,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping(path = "/exists", params = "telephone")
+	@PreAuthorize("hasAuthority('GESTOR_USER')")
 	public ResponseEntity<Object> existsByTelephone(@RequestParam String telephone) {
 		
 		if(employeeService.existsByTelephone(telephone)) {

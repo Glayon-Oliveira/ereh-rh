@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,7 @@ public class PositionController {
 	}
 
 	@PostMapping("/register")
+	@PreAuthorize("hasAuthority('ADMIN_USER')")
 	public ResponseEntity<PositionDTO> register(@RequestBody @Valid PositionDTO position){
 		
 		PositionDTO newPosition = positionService.save(position);
@@ -46,6 +48,7 @@ public class PositionController {
 	}
 	
 	@DeleteMapping("/delete")
+	@PreAuthorize("hasAuthority('ADMIN_USER')")
 	public ResponseEntity<Object> delete(@RequestParam int id, @RequestParam String deleteCode){
 
 		int code = (this.deleteCode.equals(deleteCode)) ? 200 : 403;
@@ -64,7 +67,7 @@ public class PositionController {
 
 	}
 		
-	@GetMapping(path = "/search", params = "name")
+	@GetMapping(path = "/search", params = "name")	
 	public ResponseEntity<PositionDTO> getByName(@RequestParam String name){
 		
 		Optional<PositionDTO> positionDTO = positionService.findByName(name.toUpperCase());
@@ -76,7 +79,7 @@ public class PositionController {
 		return ResponseEntity.notFound().build();	
 	}
 		
-	@GetMapping(path = "/search", params = "contain")
+	@GetMapping(path = "/search", params = "contain")	
 	public ResponseEntity<Page<PositionDTO>> getByNameContaning(@RequestParam String contain, Pageable pageable){
 		
 		Page<PositionDTO> dtoPage = positionService.findByNameContaining(contain, pageable);
@@ -84,7 +87,7 @@ public class PositionController {
 		return ResponseEntity.ok(dtoPage);		
 	}
 	
-	@GetMapping(path = "/search")
+	@GetMapping(path = "/search")	
 	public ResponseEntity<Page<PositionDTO>> getAll(Pageable pageable){
 		
 		Page<PositionDTO> dtoPage = positionService.findAll(pageable);
@@ -92,7 +95,7 @@ public class PositionController {
 		return ResponseEntity.ok(dtoPage);		
 	}
 	
-	@GetMapping(path = "search", params = "department")
+	@GetMapping(path = "search", params = "department")	
 	public ResponseEntity<Page<PositionDTO>> getByDepartment(@RequestParam int department, Pageable pageable){
 		
 		Page<PositionDTO> dtoPage = positionService.findByDepartmentId(department, pageable);
